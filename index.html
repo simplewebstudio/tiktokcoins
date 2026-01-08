@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Coin Recharge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Coin Animations */
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .coin-bounce {
+            animation: bounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform-origin: center;
+        }
+
+        /* Modal Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes checkmarkPop {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-enter {
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .checkmark-anim {
+            animation: checkmarkPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+            opacity: 0;
+        }
+
+        .blur-active {
+            filter: blur(20px) brightness(0.9);
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        .transition-all-custom {
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-white text-black no-scrollbar overflow-x-hidden">
+
+    <!-- Main Container -->
+    <div id="main-content" class="flex flex-col min-h-screen transition-all-custom">
+        <!-- Header -->
+        <header class="px-6 py-4 flex items-center justify-between bg-white border-b border-gray-100 sticky top-0 z-40 max-w-4xl mx-auto w-full">
+            <div class="flex items-center gap-4">
+                <button class="p-1 hover:bg-gray-100 rounded-full transition-colors">
+                    <i data-lucide="chevron-left" class="w-7 h-7 stroke-[2.5]"></i>
+                </button>
+                <h1 class="text-xl font-bold">Balance</h1>
+            </div>
+            <button class="p-1 hover:bg-gray-100 rounded-full transition-colors">
+                <i data-lucide="menu" class="w-7 h-7"></i>
+            </button>
+        </header>
+
+        <!-- Main Body -->
+        <main class="flex-1 max-w-2xl mx-auto w-full px-6 py-8 pb-32">
+            
+            <!-- Balance Card with Overlay Area -->
+            <div class="relative w-full mb-8 select-none">
+                <img src="https://i.ibb.co/9HZkHp6M/TTcard.png" alt="TikTok Balance Card" class="w-full h-auto block">
+                
+                <!-- Coin Overlay Container -->
+                <div id="coin-overlay" class="absolute top-[-5%] left-[6%] w-[80%] max-w-[288px] flex flex-wrap content-start overflow-visible pt-14">
+                    <!-- Coins will be injected here via JS -->
+                </div>
+            </div>
+
+            <!-- Recharge Title -->
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-black font-extrabold text-2xl">Recharge</h2>
+            </div>
+
+            <!-- Coin Packages -->
+            <div id="recharge-list" class="flex flex-col mb-10">
+                <!-- Package 1 -->
+                <div class="flex items-center justify-between py-1 border-b border-gray-50">
+                    <div class="flex items-center gap-1 flex-wrap max-w-[70%]">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                    </div>
+                    <button onclick="handleRecharge(1)" class="bg-[#FF2D55] hover:bg-[#E6294D] text-white font-extrabold py-2 px-8 rounded-xl active:scale-95 transition-all shadow-sm">GO</button>
+                </div>
+                <!-- Package 2 -->
+                <div class="flex items-center justify-between py-1 border-b border-gray-50">
+                    <div class="flex items-center gap-1 flex-wrap max-w-[70%]">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                    </div>
+                    <button onclick="handleRecharge(2)" class="bg-[#FF2D55] hover:bg-[#E6294D] text-white font-extrabold py-2 px-8 rounded-xl active:scale-95 transition-all shadow-sm">GO</button>
+                </div>
+                <!-- Package 3 -->
+                <div class="flex items-center justify-between py-1 border-b border-gray-50">
+                    <div class="flex items-center gap-1 flex-wrap max-w-[70%]">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                    </div>
+                    <button onclick="handleRecharge(3)" class="bg-[#FF2D55] hover:bg-[#E6294D] text-white font-extrabold py-2 px-8 rounded-xl active:scale-95 transition-all shadow-sm">GO</button>
+                </div>
+                <!-- Package 4 -->
+                <div class="flex items-center justify-between py-1 border-b border-gray-50">
+                    <div class="flex items-center gap-1 flex-wrap max-w-[70%]">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                        <img src="https://i.ibb.co/S42SJwyH/TTcoin.png" class="w-12 h-12 object-contain">
+                    </div>
+                    <button onclick="handleRecharge(4)" class="bg-[#FF2D55] hover:bg-[#E6294D] text-white font-extrabold py-2 px-8 rounded-xl active:scale-95 transition-all shadow-sm">GO</button>
+                </div>
+            </div>
+
+            <!-- Center Withdraw Button -->
+            <div class="mt-12 flex justify-center w-full">
+                <button onclick="triggerWithdraw()" class="bg-[#FF2D55] hover:bg-[#E6294D] text-white font-extrabold py-3.5 px-20 rounded-2xl active:scale-95 transition-all shadow-lg text-lg tracking-wide">
+                    Withdraw
+                </button>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2.5 flex items-center justify-around z-50">
+            <div class="flex items-center justify-between w-full max-w-4xl">
+                <!-- Home -->
+                <button class="flex flex-col items-center gap-0.5 flex-1">
+                    <i data-lucide="home" class="w-6 h-6 text-[#8A8B91]"></i>
+                    <span class="text-[10px] font-medium text-[#8A8B91]">Home</span>
+                </button>
+                
+                <!-- Discover -->
+                <button class="flex flex-col items-center gap-0.5 flex-1">
+                    <i data-lucide="compass" class="w-6 h-6 text-[#8A8B91]"></i>
+                    <span class="text-[10px] font-medium text-[#8A8B91]">Discover</span>
+                </button>
+
+                <!-- Center Glitch Button -->
+                <div class="flex-1 flex justify-center">
+                    <div class="relative w-[45px] h-[30px]">
+                        <div class="absolute top-0 bottom-0 left-[-3px] w-full bg-[#00F2EA] rounded-[10px]"></div>
+                        <div class="absolute top-0 bottom-0 right-[-3px] w-full bg-[#FF0050] rounded-[10px]"></div>
+                        <button class="relative w-full h-full bg-black rounded-[8px] flex items-center justify-center text-white active:scale-95 transition-transform">
+                            <i data-lucide="plus" class="w-5 h-5 stroke-[3]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Inbox -->
+                <button class="flex flex-col items-center gap-0.5 relative flex-1">
+                    <div class="relative">
+                        <i data-lucide="message-square" class="w-6 h-6 text-[#8A8B91]"></i>
+                        <div class="absolute -top-1.5 -right-3.5 bg-[#FF0050] text-white text-[9px] font-bold px-1.5 h-[16px] min-w-[24px] rounded-full flex items-center justify-center border-2 border-white">
+                            99+
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-medium text-[#8A8B91]">Inbox</span>
+                </button>
+
+                <!-- Profile (Active) -->
+                <button class="flex flex-col items-center gap-0.5 flex-1">
+                    <i data-lucide="user" class="w-6 h-6 text-black fill-black"></i>
+                    <span class="text-[10px] font-medium text-black">Profile</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Withdrawal Modal Overlay -->
+    <div id="modal-overlay" class="fixed inset-0 z-[100] flex items-center justify-center p-8 bg-black/5 hidden">
+        <!-- Backdrop Blur helper -->
+        <div class="absolute inset-0 bg-black/5" onclick="closeModal()"></div>
+        
+        <div class="relative bg-white rounded-[32px] p-10 flex flex-col items-center text-center shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] max-w-[340px] w-full modal-enter" onclick="event.stopPropagation()">
+            <!-- Checkmark -->
+            <div class="mb-6 bg-green-50 p-5 rounded-full checkmark-anim">
+                <i data-lucide="check-circle-2" class="w-[72px] h-[72px] text-[#25C059] stroke-[1.5]"></i>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-black mb-6 tracking-tight">
+                Withdrawal in progress
+            </h3>
+            
+            <!-- Timer and Progress Bar -->
+            <div class="w-full mb-8">
+                <div class="flex justify-between items-end mb-2 px-1">
+                    <span class="text-gray-400 text-sm font-semibold">Estimated time</span>
+                    <span id="timer-text" class="text-black text-lg font-mono font-bold tracking-wider">05:00</span>
+                </div>
+                <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-[#25C059] transition-all duration-1000 ease-linear rounded-full shadow-[0_0_10px_rgba(37,192,89,0.3)]" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <button onclick="closeModal()" class="w-full bg-black text-white font-bold py-4 px-6 rounded-2xl transition-all active:scale-95 shadow-md">
+                Got it
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let totalCoins = 0;
+        const maxCoins = 16;
+        let timeLeft = 300; // 5 mins
+        let timerInterval = null;
+
+        // Initialize Icons
+        lucide.createIcons();
+
+        function handleRecharge(amount) {
+            if (totalCoins >= maxCoins) return;
+
+            const nextTotal = Math.min(totalCoins + amount, maxCoins);
+            const coinsToAdd = nextTotal - totalCoins;
+
+            for (let i = 0; i < coinsToAdd; i++) {
+                spawnCoin();
+            }
+
+            totalCoins = nextTotal;
+        }
+
+        function spawnCoin() {
+            const overlay = document.getElementById('coin-overlay');
+            const coinDiv = document.createElement('div');
+            coinDiv.className = 'mx-[1px] -mt-[15px] coin-bounce';
+            
+            const coinImg = document.createElement('img');
+            coinImg.src = 'https://i.ibb.co/S42SJwyH/TTcoin.png';
+            coinImg.className = 'w-[30px] h-[30px] object-contain';
+            
+            coinDiv.appendChild(coinImg);
+            overlay.appendChild(coinDiv);
+        }
+
+        function triggerWithdraw() {
+            const modal = document.getElementById('modal-overlay');
+            const main = document.getElementById('main-content');
+            
+            modal.classList.remove('hidden');
+            main.classList.add('blur-active');
+            
+            startTimer();
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-overlay');
+            const main = document.getElementById('main-content');
+            
+            modal.classList.add('hidden');
+            main.classList.remove('blur-active');
+            
+            stopTimer();
+        }
+
+        function startTimer() {
+            timeLeft = 300;
+            updateTimerDisplay();
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft < 0) {
+                    stopTimer();
+                    return;
+                }
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            const formatted = `${mins}:${secs.toString().padStart(2, '0')}`;
+            
+            document.getElementById('timer-text').innerText = formatted;
+            
+            const percentage = ((300 - timeLeft) / 300) * 100;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+        }
+    </script>
+</body>
+</html>
