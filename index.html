@@ -239,11 +239,16 @@
             const nextTotal = Math.min(totalCoins + amount, maxCoins);
             const coinsToAdd = nextTotal - totalCoins;
 
-            for (let i = 0; i < coinsToAdd; i++) {
-                spawnCoin();
-            }
-
+            // Update state immediately so subsequent clicks account for ongoing additions
+            const startTotal = totalCoins;
             totalCoins = nextTotal;
+
+            // Stagger the appearance of each coin
+            for (let i = 0; i < coinsToAdd; i++) {
+                setTimeout(() => {
+                    spawnCoin();
+                }, i * 120); // 120ms delay between each coin appearance
+            }
         }
 
         function spawnCoin() {
